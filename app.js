@@ -23,7 +23,16 @@ analyzeBtn.addEventListener("click", async () => {
   try {
     const apiUrl = `${GAS_URL}?url=${encodeURIComponent(raceUrl)}`;
     const res = await fetch(apiUrl);
+
+    if (!res.ok) {
+      throw new Error(`通信エラー: ${res.status}`);
+    }
+
     const data = await res.json();
+
+    if (data.status === "error") {
+      throw new Error(data.message || "GAS側でエラーが発生しました");
+    }
 
     renderResult(data);
 
@@ -38,6 +47,7 @@ analyzeBtn.addEventListener("click", async () => {
 
 function startLoading() {
   analyzeBtn.disabled = true;
+
   document.getElementById("loading").classList.remove("hidden");
   document.getElementById("result").classList.add("hidden");
 
@@ -70,11 +80,11 @@ function renderResult(data) {
   setProgress("分析完了！", 100);
   stopLoading();
 
-  if (!data.aiScoreRanking || data.aiScoreRanking.length === 0) {
-  alert("分析結果が取得できません。URLがスマホ版になってる可能性があります！");
-  console.log(data);
-  return;
-}
+  if (!Array.isArray(data.aiScoreRanking) || data.aiScoreRanking.length === 0) {
+    alert("分析結果が取得できません。URLがスマホ版、対象外ページ、またはnetkeiba側の仕様変更の可能性があります！");
+    console.log(data);
+    return;
+  }
 
   document.getElementById("result").classList.remove("hidden");
   document.getElementById("raceTitle").textContent = data.title || "分析結果";
@@ -83,30 +93,34 @@ function renderResult(data) {
   rankingList.innerHTML = "";
 
   data.aiScoreRanking.slice(0, 10).forEach(item => {
-    const card = document.createElement("div");
-    card.className = `rank-card rank-${item.rank}`;
+    const detail = item.detail || {};
 
-    const ranksHtml = (item.recentRanks || [])
-      .map(rank => `<span class="rank-chip ${getRankClass(rank)}">${rank}</span>`)
-      .join(`<span class="rank-separator">-</span>`);
+    const card = document.createElement("div");
+    card.className = `rank-card rank-${Number(item.rank) || ""}`;
+
+    const ranksHtml = Array.isArray(item.recentRanks)
+      ? item.recentRanks
+          .map(rank => `<span class="rank-chip ${getRankClass(rank)}">${escapeHtml(rank || "-")}</span>`)
+          .join(`<span class="rank-separator">-</span>`)
+      : "";
 
     card.innerHTML = `
       <div class="rank-main">
         <div class="rank-left">
           <div class="rank-title">
-            <span class="mark">${item.mark || ""}</span>
-            <span class="rank-number">${item.rank}位</span>
+            <span class="mark">${escapeHtml(item.mark || "")}</span>
+            <span class="rank-number">${escapeHtml(item.rank || "-")}位</span>
           </div>
 
-          <h3>${item.horseName}</h3>
-          <p class="score">総合スコア：${item.totalScore}点</p>
+          <h3>${escapeHtml(item.horseName || "馬名不明")}</h3>
+          <p class="score">総合スコア：${escapeHtml(item.totalScore ?? 0)}点</p>
 
           <ul class="score-list">
-            <li>🟢 コース適性：${item.detail.courseFit}点</li>
-            <li>📊 近走成績：${item.detail.recentForm}点</li>
-            <li>🔥 上がり性能：${item.detail.agari}点</li>
-            <li>🏆 距離ベスト：${item.detail.bestDistance}点</li>
-            <li>⭐ 最新走：${item.detail.latestRank}点</li>
+            <li>🟢 コース適性：${escapeHtml(detail.courseFit ?? 0)}点</li>
+            <li>📊 近走成績：${escapeHtml(detail.recentForm ?? 0)}点</li>
+            <li>🔥 上がり性能：${escapeHtml(detail.agari ?? 0)}点</li>
+            <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
+            <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
           </ul>
         </div>
 
@@ -145,8 +159,11 @@ function renderExplanation(data) {
   const explanationBox = document.getElementById("explanationBox");
 
   const condition = data.raceCondition || {};
-  const courseText = condition.distanceText
-    ? `${condition.placeName}${condition.distanceText}`
+  const placeName = condition.placeName || "";
+  const distanceText = condition.distanceText || "";
+
+  const courseText = distanceText
+    ? `${placeName}${distanceText}`
     : "対象レースの条件";
 
   explanationBox.innerHTML = `
@@ -160,7 +177,7 @@ function renderExplanation(data) {
         <div class="explanation-item">
           <h3>🟢 コース適性</h3>
           <p>
-            対象レースと同じ条件、今回は <strong>${courseText}</strong> の過去成績を見ています。
+            対象レースと同じ条件、今回は <strong>${escapeHtml(courseText)}</strong> の過去成績を見ています。
             直近1年以内の同条件レースで、持ちタイムが速い馬ほど高得点です。
           </p>
           <span>最大30点</span>
@@ -187,7 +204,7 @@ function renderExplanation(data) {
         <div class="explanation-item">
           <h3>🏆 距離ベスト</h3>
           <p>
-            対象レースと同じ距離、例えば安田記念なら芝1600、有馬記念なら芝2500のベストタイムを比較します。
+            対象レースと同じ距離のベストタイムを比較します。
             距離適性の強さを見る項目です。
           </p>
           <span>最大15点</span>
@@ -204,14 +221,23 @@ function renderExplanation(data) {
       </div>
 
       <div class="explanation-note">
-       <p>
-         ※このツールでは、ChatGPTのAI予測を使用しています。あまり過信せず参考程度に留めてください。
-       </p>
+        <p>
+          ※このツールでは、ChatGPTのAI予測を使用しています。あまり過信せず参考程度に留めてください。
+        </p>
 
-       <p>
-         ※このスコアは過去成績ベースの機械的な評価です。枠順、馬場状態、展開、当日の気配などを別途確認すると、より精度が上がります。
-       </p>
-     </div>
+        <p>
+          ※このスコアは過去成績ベースの機械的な評価です。枠順、馬場状態、展開、当日の気配などを別途確認すると、より精度が上がります。
+        </p>
+      </div>
     </section>
   `;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
