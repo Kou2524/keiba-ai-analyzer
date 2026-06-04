@@ -48,6 +48,8 @@ analyzeBtn.addEventListener("click", async () => {
 function startLoading() {
   analyzeBtn.disabled = true;
 
+  document.getElementById("loadingTitle").textContent = "分析中";
+  
   document.getElementById("loading").classList.remove("hidden");
   document.getElementById("result").classList.add("hidden");
 
@@ -77,7 +79,11 @@ function setProgress(text, percent) {
 
 function renderResult(data) {
   clearProgressTimers();
+
+  document.getElementById("loadingTitle").textContent = "予測完了！";
+
   setProgress("予測完了！", 100);
+
   stopLoading();
 
   if (!Array.isArray(data.aiScoreRanking) || data.aiScoreRanking.length === 0) {
