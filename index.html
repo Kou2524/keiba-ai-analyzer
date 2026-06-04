@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>競馬分析ツール</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <h1>競馬分析ツール</h1>
+
+    <section class="card">
+      <label for="raceUrl">netkeiba 出馬表URL</label>
+      <input id="raceUrl" type="text" placeholder="https://race.netkeiba.com/race/shutuba.html?...">
+      <button id="analyzeBtn">分析開始</button>
+    </section>
+
+    <section id="loading" class="card hidden">
+      <h2>分析中</h2>
+      <p id="statusText">準備中...</p>
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+      <p id="progressPercent">0%</p>
+    </section>
+
+    <section id="result" class="hidden">
+      <h2 id="raceTitle"></h2>
+      <div id="rankingList"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
