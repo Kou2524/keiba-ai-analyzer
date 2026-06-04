@@ -128,6 +128,8 @@ function renderResult(data) {
 
     rankingList.appendChild(card);
   });
+
+  renderExplanation(data);
 }
 
 function getRankClass(rank) {
@@ -137,4 +139,73 @@ function getRankClass(rank) {
   if (n === 2) return "rank-second";
   if (n === 3) return "rank-third";
   return "rank-other";
+}
+
+function renderExplanation(data) {
+  const explanationBox = document.getElementById("explanationBox");
+
+  const condition = data.raceCondition || {};
+  const courseText = condition.distanceText
+    ? `${condition.placeName}${condition.distanceText}`
+    : "対象レースの条件";
+
+  explanationBox.innerHTML = `
+    <section class="explanation-card">
+      <h2>スコア判定の見方</h2>
+      <p class="explanation-lead">
+        この予想は、出走馬の過去成績から5つの項目を点数化して総合スコアを出しています。
+      </p>
+
+      <div class="explanation-grid">
+        <div class="explanation-item">
+          <h3>🟢 コース適性</h3>
+          <p>
+            対象レースと同じ条件、今回は <strong>${courseText}</strong> の過去成績を見ています。
+            直近1年以内の同条件レースで、持ちタイムが速い馬ほど高得点です。
+          </p>
+          <span>最大30点</span>
+        </div>
+
+        <div class="explanation-item">
+          <h3>📊 近走成績</h3>
+          <p>
+            直近5走の着順を点数化しています。
+            1着10点、2着8点、3着6点、4〜5着4点、6〜9着2点、10着以下0点で計算します。
+          </p>
+          <span>最大25点</span>
+        </div>
+
+        <div class="explanation-item">
+          <h3>🔥 上がり性能</h3>
+          <p>
+            各馬の過去レースから、最も速い上がり3Fを評価しています。
+            上がりが速い馬ほど、終盤の伸び脚があると見て加点します。
+          </p>
+          <span>最大20点</span>
+        </div>
+
+        <div class="explanation-item">
+          <h3>🏆 距離ベスト</h3>
+          <p>
+            対象レースと同じ距離、例えば安田記念なら芝1600、有馬記念なら芝2500のベストタイムを比較します。
+            距離適性の強さを見る項目です。
+          </p>
+          <span>最大15点</span>
+        </div>
+
+        <div class="explanation-item">
+          <h3>⭐ 最新走</h3>
+          <p>
+            一番新しいレースの着順を評価しています。
+            最新走で好走している馬ほど、現在の状態が良いと判断して加点します。
+          </p>
+          <span>最大10点</span>
+        </div>
+      </div>
+
+      <p class="explanation-note">
+        ※このスコアは過去成績ベースの機械的な評価です。枠順、馬場状態、展開、当日の気配などは別途確認すると精度が上がります。
+      </p>
+    </section>
+  `;
 }
