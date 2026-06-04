@@ -237,3 +237,74 @@ button:disabled {
 .sub-button:hover {
   background: #f1f1f1;
 }
+
+.explanation-card {
+  background: #ffffff;
+  border: 2px solid #222;
+  border-left: 8px solid #222;
+  border-radius: 18px;
+  padding: 26px;
+  margin: 28px 0 48px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+}
+
+.explanation-card h2 {
+  font-size: 26px;
+  margin: 0 0 12px;
+}
+
+.explanation-lead {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.explanation-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.explanation-item {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.explanation-item h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.explanation-item p {
+  margin: 0;
+  line-height: 1.7;
+  color: #444;
+  font-size: 14px;
+}
+
+.explanation-item span {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #222;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.explanation-note {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.7;
+}
+
+@media (min-width: 760px) {
+  .explanation-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
