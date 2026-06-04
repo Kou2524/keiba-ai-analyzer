@@ -123,7 +123,7 @@ function getRankClass(rank) {
   const n = Number(rank);
 
   if (n === 1) return "rank-win";
-  if (n === 2) return "rank-2";
-  if (n === 3) return "rank-3";
+  if (n === 2) return "rank-second";
+  if (n === 3) return "rank-third";
   return "rank-other";
 }
