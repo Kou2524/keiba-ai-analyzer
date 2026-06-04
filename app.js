@@ -30,8 +30,8 @@ analyzeBtn.addEventListener("click", async () => {
   } catch (error) {
     console.error(error);
     clearProgressTimers();
-    setProgress("エラーが発生しました", 100);
-    alert("取得に失敗したよ：" + error.message);
+    setProgress("エラーが発生しました！", 100);
+    alert("取得に失敗しました！：" + error.message);
     stopLoading();
   }
 });
@@ -69,6 +69,12 @@ function renderResult(data) {
   clearProgressTimers();
   setProgress("分析完了！", 100);
   stopLoading();
+
+  if (!data.aiScoreRanking || data.aiScoreRanking.length === 0) {
+  alert("分析結果が取得できません。URLがスマホ版になってる可能性があります！");
+  console.log(data);
+  return;
+}
 
   document.getElementById("result").classList.remove("hidden");
   document.getElementById("raceTitle").textContent = data.title || "分析結果";
