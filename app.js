@@ -82,8 +82,6 @@ function renderResult(data) {
 
   document.getElementById("loadingTitle").textContent = "予測完了！";
 
-  setProgress("予測完了！", 100);
-
   stopLoading();
 
   if (!Array.isArray(data.aiScoreRanking) || data.aiScoreRanking.length === 0) {
