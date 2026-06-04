@@ -82,10 +82,12 @@ function renderResult(data) {
 
   document.getElementById("loadingTitle").textContent = "予測完了！";
 
-  setProgress("予測完了！", 100);
-  
-  stopLoading();
+  document.getElementById("statusText").textContent = "";
 
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressPercent").textContent = "100%";
+
+  stopLoading();
   if (!Array.isArray(data.aiScoreRanking) || data.aiScoreRanking.length === 0) {
     alert("分析結果が取得できません。URLがスマホ版、対象外ページ、またはnetkeiba側の仕様変更の可能性があります！");
     console.log(data);
