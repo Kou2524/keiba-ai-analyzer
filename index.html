@@ -6,13 +6,20 @@
   <title>AI競馬分析ツール</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <main class="app">
     <h1>AI競馬分析ツール</h1>
 
     <section class="card">
       <label for="raceUrl">netkeiba 出馬表URL</label>
-      <input id="raceUrl" type="text" placeholder="https://race.netkeiba.com/race/shutuba.html?...">
+      <input
+        id="raceUrl"
+        type="text"
+        placeholder="https://race.netkeiba.com/race/shutuba.html?..."
+        autocomplete="off"
+      >
+
       <button id="analyzeBtn">分析開始</button>
       <button id="openNetkeibaBtn" class="sub-button">netkeibaを開く</button>
     </section>
@@ -20,9 +27,11 @@
     <section id="loading" class="card hidden">
       <h2>分析中</h2>
       <p id="statusText">準備中...</p>
+
       <div class="progress">
         <div id="progressBar"></div>
       </div>
+
       <p id="progressPercent">0%</p>
     </section>
 
