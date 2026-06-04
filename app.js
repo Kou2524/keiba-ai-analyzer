@@ -14,7 +14,7 @@ analyzeBtn.addEventListener("click", async () => {
   const raceUrl = raceUrlInput.value.trim();
 
   if (!raceUrl) {
-    alert("URLを入力してね！");
+    alert("URLを入力してください！");
     return;
   }
 
@@ -30,8 +30,8 @@ analyzeBtn.addEventListener("click", async () => {
   } catch (error) {
     console.error(error);
     clearProgressTimers();
-    setProgress("エラーが発生しました！", 100);
-    alert("取得に失敗しました！：" + error.message);
+    setProgress("エラーが発生しました", 100);
+    alert("取得に失敗しました：" + error.message);
     stopLoading();
   }
 });
@@ -204,7 +204,8 @@ function renderExplanation(data) {
       </div>
 
       <p class="explanation-note">
-        ※このスコアは過去成績ベースの機械的な評価です。枠順、馬場状態、展開、当日の気配などは別途確認すると精度が上がります。
+        ※このスコアは過去成績ベースの機械的な評価です。
+        　枠順、馬場状態、展開、当日の気配などを別途確認すると、より精度が上がります。
       </p>
     </section>
   `;
