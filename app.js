@@ -222,7 +222,7 @@ function renderExplanation(data) {
 
       <div class="explanation-note">
         <p>
-          ※このツールでは、ChatGPTのAI予測を使用しています。あまり過信せず参考程度に留めてください。
+          ※このツールでは、ChatGPTのAI予測を使用しています。あまり過信せず、参考程度に留めてください。
         </p>
 
         <p>
