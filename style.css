@@ -50,6 +50,10 @@ button {
   font-weight: bold;
 }
 
+button:disabled {
+  opacity: 0.6;
+}
+
 .hidden {
   display: none;
 }
@@ -80,7 +84,7 @@ button {
 }
 
 .rank-1 {
-  background: linear-gradient(135deg, #fffdf7, #ffffff);
+  background: #ffffff;
   border-color: #e0aa00;
   border-left-color: #e0aa00;
 }
@@ -173,11 +177,11 @@ button {
   background: linear-gradient(135deg, #f0c400, #c99a00);
 }
 
-.rank-2 {
+.rank-second {
   background: linear-gradient(135deg, #aab4bd, #7f8b96);
 }
 
-.rank-3 {
+.rank-third {
   background: linear-gradient(135deg, #dd7a20, #b65410);
 }
 
