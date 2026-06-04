@@ -2,8 +2,13 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzNfqlmoLtIUpigsCeg9C2H
 
 const analyzeBtn = document.getElementById("analyzeBtn");
 const raceUrlInput = document.getElementById("raceUrl");
+const openNetkeibaBtn = document.getElementById("openNetkeibaBtn");
 
 let progressTimers = [];
+
+openNetkeibaBtn.addEventListener("click", () => {
+  window.open("https://race.netkeiba.com/top/", "_blank");
+});
 
 analyzeBtn.addEventListener("click", async () => {
   const raceUrl = raceUrlInput.value.trim();
