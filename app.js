@@ -102,7 +102,7 @@ function renderResult(data) {
           <p class="score">総合スコア：${item.totalScore}点</p>
 
           <ul class="score-list">
-            <li>🟢 東京1600：${item.detail.tokyo1600}点</li>
+            <li>🟢 コース適性：${item.detail.courseFit}点</li>
             <li>📊 近走成績：${item.detail.recentForm}点</li>
             <li>🔥 上がり性能：${item.detail.agari}点</li>
             <li>🏆 距離ベスト：${item.detail.bestDistance}点</li>
