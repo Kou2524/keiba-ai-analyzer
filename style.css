@@ -70,24 +70,147 @@ button {
 }
 
 .rank-card {
-  background: white;
-  border-radius: 16px;
-  padding: 18px;
-  margin: 12px 0;
-  border-left: 8px solid #222;
+  background: linear-gradient(135deg, #fffdf7, #ffffff);
+  border-radius: 18px;
+  padding: 26px;
+  margin: 18px 0;
+  border: 2px solid #cfd6dc;
+  border-left: 8px solid #8b98a5;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
 }
 
-.mark {
-  font-size: 28px;
-  font-weight: bold;
+.rank-1 {
+  border-color: #e0aa00;
+  border-left-color: #e0aa00;
+}
+
+.rank-2 {
+  border-color: #9aa7b2;
+  border-left-color: #9aa7b2;
+}
+
+.rank-3 {
+  border-color: #d16b16;
+  border-left-color: #d16b16;
+}
+
+.rank-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.rank-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark,
+.rank-number {
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.rank-card h3 {
+  font-size: 26px;
+  margin: 18px 0 12px;
 }
 
 .score {
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 700;
 }
 
-.detail {
+.score-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  line-height: 1.9;
+  font-size: 16px;
+}
+
+.rank-right {
+  border-left: 1px solid #ddd;
+  padding-left: 28px;
+}
+
+.rank-right h4 {
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.recent-ranks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rank-chip {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.rank-win {
+  background: linear-gradient(135deg, #f0c400, #c99a00);
+}
+
+.rank-2 {
+  background: linear-gradient(135deg, #aab4bd, #7f8b96);
+}
+
+.rank-3 {
+  background: linear-gradient(135deg, #dd7a20, #b65410);
+}
+
+.rank-other {
+  background: linear-gradient(135deg, #4b97e6, #1e70c9);
+}
+
+.rank-separator {
+  font-weight: bold;
+  color: #999;
+}
+
+.legend {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
   font-size: 14px;
-  color: #555;
-  line-height: 1.6;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  margin-right: 4px;
+}
+
+.win { background: #e0aa00; }
+.place2 { background: #8b98a5; }
+.place3 { background: #d16b16; }
+.other { background: #1e70c9; }
+
+@media (max-width: 700px) {
+  .rank-main {
+    grid-template-columns: 1fr;
+  }
+
+  .rank-right {
+    border-left: none;
+    border-top: 1px solid #ddd;
+    padding-left: 0;
+    padding-top: 20px;
+  }
 }
