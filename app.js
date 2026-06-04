@@ -204,6 +204,8 @@ function renderExplanation(data) {
       </div>
 
       <p class="explanation-note">
+        ※このツールでは、ChatGPTのAI予測を使用しています。
+        　あまり過信せず参考程度に留めてください。
         ※このスコアは過去成績ベースの機械的な評価です。
         　枠順、馬場状態、展開、当日の気配などを別途確認すると、より精度が上がります。
       </p>
