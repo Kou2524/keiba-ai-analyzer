@@ -77,7 +77,7 @@ function setProgress(text, percent) {
 
 function renderResult(data) {
   clearProgressTimers();
-  setProgress("予想完了！", 100);
+  setProgress("予測完了！", 100);
   stopLoading();
 
   if (!Array.isArray(data.aiScoreRanking) || data.aiScoreRanking.length === 0) {
