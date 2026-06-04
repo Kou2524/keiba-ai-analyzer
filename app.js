@@ -77,7 +77,7 @@ function setProgress(text, percent) {
 
 function renderResult(data) {
   clearProgressTimers();
-  setProgress("分析完了！", 100);
+  setProgress("予想完了！", 100);
   stopLoading();
 
   if (!Array.isArray(data.aiScoreRanking) || data.aiScoreRanking.length === 0) {
@@ -222,7 +222,7 @@ function renderExplanation(data) {
 
       <div class="explanation-note">
         <p>
-          ※このツールでは、ChatGPTのAI予測を使用しています。あまり過信せず、参考程度に留めてください。
+          ※このツールでは、ChatGPTによるAI予想を使用しています。あまり過信せず、参考程度に留めてください。
         </p>
 
         <p>
