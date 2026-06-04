@@ -227,3 +227,13 @@ button:disabled {
     padding-top: 20px;
   }
 }
+
+.sub-button {
+  background: #ffffff;
+  color: #222;
+  border: 2px solid #222;
+}
+
+.sub-button:hover {
+  background: #f1f1f1;
+}
