@@ -3,6 +3,8 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzNfqlmoLtIUpigsCeg9C2H
 const analyzeBtn = document.getElementById("analyzeBtn");
 const raceUrlInput = document.getElementById("raceUrl");
 
+let progressTimers = [];
+
 analyzeBtn.addEventListener("click", async () => {
   const raceUrl = raceUrlInput.value.trim();
 
@@ -18,12 +20,13 @@ analyzeBtn.addEventListener("click", async () => {
     const res = await fetch(apiUrl);
     const data = await res.json();
 
-    setProgress("分析完了！", 100);
     renderResult(data);
 
   } catch (error) {
     console.error(error);
-    alert("取得に失敗したよ。GAS URLかCORSを確認して！");
+    clearProgressTimers();
+    setProgress("エラーが発生しました", 100);
+    alert("取得に失敗したよ：" + error.message);
     stopLoading();
   }
 });
@@ -33,11 +36,18 @@ function startLoading() {
   document.getElementById("loading").classList.remove("hidden");
   document.getElementById("result").classList.add("hidden");
 
+  clearProgressTimers();
+
   setProgress("出馬表を取得中...", 15);
 
-  setTimeout(() => setProgress("出走馬を解析中...", 35), 700);
-  setTimeout(() => setProgress("過去成績を取得中...", 60), 1600);
-  setTimeout(() => setProgress("AIスコアを計算中...", 85), 3000);
+  progressTimers.push(setTimeout(() => setProgress("出走馬を解析中...", 35), 700));
+  progressTimers.push(setTimeout(() => setProgress("過去成績を取得中...", 60), 1600));
+  progressTimers.push(setTimeout(() => setProgress("AIスコアを計算中...", 85), 3000));
+}
+
+function clearProgressTimers() {
+  progressTimers.forEach(timer => clearTimeout(timer));
+  progressTimers = [];
 }
 
 function stopLoading() {
@@ -51,6 +61,8 @@ function setProgress(text, percent) {
 }
 
 function renderResult(data) {
+  clearProgressTimers();
+  setProgress("分析完了！", 100);
   stopLoading();
 
   document.getElementById("result").classList.remove("hidden");
