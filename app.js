@@ -184,13 +184,17 @@ function renderResult(data) {
             </li>
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
-            <li>🏇 騎手評価：${escapeHtml(detail.jockeyPoint ?? 0)}点
-                <br>
+            <li>
+              <div class="score-sub-lines">
+                <div>
+                  🏇 騎手評価：${escapeHtml(detail.jockeyPoint ?? 0)}点
+                </div>
                 <small>
                   ${escapeHtml(detail.jockey || "-")}
                   （評価値:${escapeHtml(detail.jockeyScore ?? 0)}）
                 </small>
-              </li>
+              </div>
+            </li>
             <li>
               <div class="score-sub-lines">
                 <div>🏃 脚質：${escapeHtml(detail.runningStyle || "不明")}</div>
