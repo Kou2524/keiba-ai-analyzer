@@ -150,12 +150,8 @@ function renderResult(data) {
   data.aiScoreRanking.slice(0, 10).forEach(item => {
     const detail = item.detail || {};
 
-    const jockeyResult = calculateJockeyScore(item);
-
-    const displayTotalScore = Math.round(
-      (Number(item.totalScore) || 0) * 0.9 +
-      jockeyResult.score * 0.1
-    );
+    const displayTotalScore =
+      Number(item.totalScore) || 0;
 
     const card = document.createElement("div");
     card.className = `rank-card rank-${Number(item.rank) || ""}`;
@@ -188,7 +184,13 @@ function renderResult(data) {
             </li>
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
-            <li>🏇 騎手評価：${escapeHtml(jockeyResult.score)}点</li>
+            <li>🏇 騎手評価：${escapeHtml(detail.jockeyPoint ?? 0)}点
+                <br>
+                <small>
+                  ${escapeHtml(detail.jockey || "-")}
+                  （評価値:${escapeHtml(detail.jockeyScore ?? 0)}）
+                </small>
+              </li>
             <li>
               <div class="score-sub-lines">
                 <div>🏃 脚質：${escapeHtml(detail.runningStyle || "不明")}</div>
@@ -206,7 +208,8 @@ function renderResult(data) {
           </p>
           
           <p class="score-comment">
-          ${escapeHtml(jockeyResult.comment)}
+            ${escapeHtml(detail.jockeyComment || "")
+              .replaceAll("。", "。<br>")}
           </p>
         </div>
 
