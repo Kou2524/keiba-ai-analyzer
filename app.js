@@ -175,12 +175,21 @@ function renderResult(data) {
           <ul class="score-list">
             <li>🟢 コース適性：${escapeHtml(detail.courseFit ?? 0)}点</li>
             <li>📊 近走成績：${escapeHtml(detail.recentForm ?? 0)}点</li>
-            <li>🔥 上がり性能：${escapeHtml(detail.agari ?? 0)}点</li>
+            <li>🔥 上がり性能：${escapeHtml(detail.agari ?? 0)}点
+                <br>
+                <small>
+                  平均上がり：${escapeHtml(detail.avgAgari ?? "-")}
+                </small>
+              </li>
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
             <li>🏇 騎手評価：${escapeHtml(jockeyResult.score)}点</li>
           </ul>
 
+          <p class="score-comment">
+          ${escapeHtml(detail.agariComment || "")}
+          </p>
+          
           <p class="score-comment">
           ${escapeHtml(jockeyResult.comment)}
           </p>
@@ -280,6 +289,16 @@ function renderExplanation(data) {
           </p>
           <span>最大10点</span>
         </div>
+
+        <div class="explanation-item">
+          <h3>🏇 騎手評価</h3>
+          <p>
+            騎手のコース相性、距離相性、継続騎乗、乗り替わり、近走成績などをもとに評価します。
+            今回の条件で騎手がどれだけプラス材料になるかを見る項目です。
+          </p>
+          <span>補正評価</span>
+        </div>
+        
       </div>
 
       <div class="explanation-note">
