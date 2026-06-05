@@ -184,10 +184,20 @@ function renderResult(data) {
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
             <li>🏇 騎手評価：${escapeHtml(jockeyResult.score)}点</li>
+            <li>🏃 脚質：${escapeHtml(detail.runningStyle || "不明")}
+                <br>
+                <small>
+                  脚質評価：${escapeHtml(detail.runningStyleScore ?? 0)}点
+                </small>
+              </li>
           </ul>
 
           <p class="score-comment">
             ${escapeHtml(detail.agariComment || "").replaceAll("。", "。<br>")}
+          </p>
+
+          <p class="score-comment">
+            ${escapeHtml(detail.runningStyleComment || "").replaceAll("。", "。<br>")}
           </p>
           
           <p class="score-comment">
@@ -241,7 +251,7 @@ function renderExplanation(data) {
     <section class="explanation-card">
       <h2>スコア判定の見方</h2>
       <p class="explanation-lead">
-        この予想は、出走馬の過去成績に加えて、騎手評価を含めた6つの項目を点数化して総合スコアを出しています。
+        この予想は、出走馬の過去成績に加えて、騎手評価・脚質評価を含めた7つの項目を点数化して総合スコアを出しています。
       </p>
 
       <div class="explanation-grid">
@@ -297,6 +307,16 @@ function renderExplanation(data) {
             今回の条件で騎手がどれだけプラス材料になるかを見る項目です。
           </p>
           <span>補正評価</span>
+        </div>
+
+        <div class="explanation-item">
+          <h3>🏃 脚質評価</h3>
+          <p>
+            過去5走の通過順から、
+            逃げ・先行・差し・追込を判定します。
+            レース展開との相性を見るための評価です。
+          </p>
+          <span>最大18点</span>
         </div>
         
       </div>
