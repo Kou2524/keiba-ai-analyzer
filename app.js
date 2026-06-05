@@ -175,19 +175,19 @@ function renderResult(data) {
           <ul class="score-list">
             <li>🟢 コース適性：${escapeHtml(detail.courseFit ?? 0)}点</li>
             <li>📊 近走成績：${escapeHtml(detail.recentForm ?? 0)}点</li>
-            <li>🔥 上がり性能：${escapeHtml(detail.agari ?? 0)}点
-                <br>
-                <small>
-                  平均上がり：${escapeHtml(detail.avgAgari ?? "-")}
-                </small>
-              </li>
+            <li>
+              <div class="score-sub-lines">
+                <div>🔥 上がり性能：${escapeHtml(detail.agari ?? 0)}点</div>
+                <small>平均上がり：${escapeHtml(detail.avgAgari ?? "-")}</small>
+              </div>
+            </li>
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
             <li>🏇 騎手評価：${escapeHtml(jockeyResult.score)}点</li>
           </ul>
 
           <p class="score-comment">
-          ${escapeHtml(detail.agariComment || "")}
+            ${escapeHtml(detail.agariComment || "").replaceAll("。", "。<br>")}
           </p>
           
           <p class="score-comment">
