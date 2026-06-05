@@ -321,3 +321,13 @@ button:disabled {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.score-sub-lines {
+  display: inline-grid;
+  grid-template-columns: auto;
+  gap: 2px;
+}
+
+.score-sub-lines small {
+  margin-left: 1.7em;
+}
