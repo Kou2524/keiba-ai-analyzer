@@ -6,6 +6,48 @@ const openNetkeibaBtn = document.getElementById("openNetkeibaBtn");
 
 let progressTimers = [];
 
+function calculateJockeyScore(horse) {
+  let score = 70;
+  const reasons = [];
+
+  if (horse.jockeyCourseTop3Rate >= 0.35) {
+    score += 7;
+    reasons.push("今回の競馬場での騎手成績が安定");
+  }
+
+  if (horse.jockeyDistanceTop3Rate >= 0.30) {
+    score += 5;
+    reasons.push("今回の距離での騎手成績が良好");
+  }
+
+  if (horse.isSameJockey) {
+    score += 6;
+    reasons.push("前走からの継続騎乗");
+  }
+
+  if (horse.jockeyChangeType === "upgrade") {
+    score += 8;
+    reasons.push("騎手乗り替わりがプラス材料");
+  } else if (horse.jockeyChangeType === "downgrade") {
+    score -= 8;
+    reasons.push("騎手乗り替わりが不安材料");
+  }
+
+  if (horse.jockeyRecentWinRate >= 0.15) {
+    score += 6;
+    reasons.push("騎手の近走成績が好調");
+  }
+
+  score = Math.max(40, Math.min(100, Math.round(score)));
+
+  return {
+    score,
+    comment: reasons.length
+      ? reasons.join("。") + "。"
+      : "騎手面では大きな加点・減点材料は少ない。"
+  };
+}
+
 openNetkeibaBtn.addEventListener("click", () => {
   window.open("https://race.netkeiba.com/top/", "_blank");
 });
@@ -103,6 +145,13 @@ function renderResult(data) {
   data.aiScoreRanking.slice(0, 10).forEach(item => {
     const detail = item.detail || {};
 
+    const jockeyResult = calculateJockeyScore(item);
+
+    const displayTotalScore = Math.round(
+      (Number(item.totalScore) || 0) * 0.9 +
+      jockeyResult.score * 0.1
+    );
+
     const card = document.createElement("div");
     card.className = `rank-card rank-${Number(item.rank) || ""}`;
 
@@ -121,7 +170,7 @@ function renderResult(data) {
           </div>
 
           <h3>${escapeHtml(item.horseName || "馬名不明")}</h3>
-          <p class="score">総合スコア：${escapeHtml(item.totalScore ?? 0)}点</p>
+          <p class="score">総合スコア：${escapeHtml(displayTotalScore)}点</p>
 
           <ul class="score-list">
             <li>🟢 コース適性：${escapeHtml(detail.courseFit ?? 0)}点</li>
@@ -129,7 +178,12 @@ function renderResult(data) {
             <li>🔥 上がり性能：${escapeHtml(detail.agari ?? 0)}点</li>
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
+            <li>🏇 騎手評価：${escapeHtml(jockeyResult.score)}点</li>
           </ul>
+
+          <p class="score-comment">
+          ${escapeHtml(jockeyResult.comment)}
+          </p>
         </div>
 
         <div class="rank-right">
@@ -178,7 +232,7 @@ function renderExplanation(data) {
     <section class="explanation-card">
       <h2>スコア判定の見方</h2>
       <p class="explanation-lead">
-        この予想は、出走馬の過去成績から5つの項目を点数化して総合スコアを出しています。
+        この予想は、出走馬の過去成績に加えて、騎手評価を含めた6つの項目を点数化して総合スコアを出しています。
       </p>
 
       <div class="explanation-grid">
