@@ -120,6 +120,9 @@ function setProgress(text, percent) {
 }
 
 function renderResult(data) {
+  
+  console.log(data.horseSummary);
+  
   clearProgressTimers();
 
   document.getElementById("loadingTitle").textContent = "予測完了！";
