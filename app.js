@@ -189,12 +189,12 @@ function renderResult(data) {
             <li>🏆 距離ベスト：${escapeHtml(detail.bestDistance ?? 0)}点</li>
             <li>⭐ 最新走：${escapeHtml(detail.latestRank ?? 0)}点</li>
             <li>🏇 騎手評価：${escapeHtml(jockeyResult.score)}点</li>
-            <li>🏃 脚質：${escapeHtml(detail.runningStyle || "不明")}
-                <br>
-                <small>
-                  脚質評価：${escapeHtml(detail.runningStyleScore ?? 0)}点
-                </small>
-              </li>
+            <li>
+              <div class="score-sub-lines">
+                <div>🏃 脚質：${escapeHtml(detail.runningStyle || "不明")}</div>
+                <small>脚質評価：${escapeHtml(detail.runningStyleScore ?? 0)}点</small>
+              </div>
+            </li>
           </ul>
 
           <p class="score-comment">
