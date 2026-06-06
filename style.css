@@ -331,3 +331,31 @@ button:disabled {
 .score-sub-lines small {
   margin-left: 2.1em;
 }
+
+.ai-confidence-box {
+  margin: 20px 0 24px;
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #111827, #1f2937);
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.ai-confidence-title {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.ai-confidence-value {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.ai-confidence-note {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin-top: 6px;
+}
