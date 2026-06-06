@@ -230,7 +230,7 @@ confidenceElement.innerHTML = `
     const displayTotalScore = item.adjustedTotalScore;
     
     const card = document.createElement("div");
-    card.className = `rank-card rank-${Number(item.rank) || ""}`;
+    card.className = `rank-card rank-${Number(item.adjustedRank) || ""}`;
 
     const ranksHtml = Array.isArray(item.recentRanks)
       ? item.recentRanks
