@@ -200,12 +200,35 @@ confidenceElement.innerHTML = `
 
   console.log(data.aiScoreRanking[0].detail);
   
-  data.aiScoreRanking.slice(0, 10).forEach(item => {
+  const adjustedRanking = data.aiScoreRanking
+    .map(item => {
+      const frameBonus = calculateFrameBonus(
+        item.horseNumber,
+        data.raceCondition
+      );
+
+      const adjustedTotalScore =
+        (Number(item.totalScore) || 0) + frameBonus;
+
+      return {
+        ...item,
+        frameBonus,
+        adjustedTotalScore
+      };
+    })
+    .sort((a, b) => b.adjustedTotalScore - a.adjustedTotalScore)
+    .map((item, index) => ({
+      ...item,
+      adjustedRank: index + 1,
+      adjustedMark: getPredictionMark(index)
+    }));
+
+  adjustedRanking.slice(0, 10).forEach(item => {
     const detail = item.detail || {};
 
-    const displayTotalScore =
-      Number(item.totalScore) || 0;
-
+    const frameBonus = item.frameBonus;
+    const displayTotalScore = item.adjustedTotalScore;
+    
     const card = document.createElement("div");
     card.className = `rank-card rank-${Number(item.rank) || ""}`;
 
@@ -219,12 +242,16 @@ confidenceElement.innerHTML = `
       <div class="rank-main">
         <div class="rank-left">
           <div class="rank-title">
-            <span class="mark">${escapeHtml(item.mark || "")}</span>
-            <span class="rank-number">${escapeHtml(item.rank || "-")}位</span>
+            <span class="mark">${escapeHtml(item.adjustedMark || "")}</span>
+            <span class="rank-number">${escapeHtml(item.adjustedRank || "-")}位</span>
           </div>
 
           <h3>${escapeHtml(item.horseName || "馬名不明")}</h3>
           <p class="score">総合スコア：${escapeHtml(displayTotalScore)}点</p>
+
+          <p class="frame-bonus">
+            🎯 枠順補正：${frameBonus >= 0 ? "+" : ""}${frameBonus}点
+          </p>
 
           <ul class="score-list">
             <li>🟢 コース適性：${escapeHtml(detail.courseFit ?? 0)}点</li>
@@ -476,4 +503,36 @@ function calculateAiConfidence(items) {
     horseCountRate * 5;
 
   return Math.round(Math.max(35, Math.min(confidence, 95)));
+}
+
+function calculateFrameBonus(horseNumber, raceCondition) {
+  const number = Number(horseNumber);
+  if (!number) return 0;
+
+  const place = raceCondition?.placeName || "";
+  const distanceText = raceCondition?.distanceText || "";
+
+  // 東京芝1600m：内〜中枠を少し評価
+  if (place === "東京" && distanceText === "芝1600") {
+    if (number >= 1 && number <= 4) return 3;
+    if (number >= 5 && number <= 12) return 1;
+    return -1;
+  }
+
+  // 中山芝1200m：内枠有利
+  if (place === "中山" && distanceText === "芝1200") {
+    if (number >= 1 && number <= 6) return 3;
+    if (number >= 7 && number <= 12) return 1;
+    return -2;
+  }
+
+  // 新潟芝1000m：外枠有利
+  if (place === "新潟" && distanceText === "芝1000") {
+    if (number >= 13) return 4;
+    if (number >= 9) return 2;
+    if (number <= 4) return -3;
+    return 0;
+  }
+
+  return 0;
 }
