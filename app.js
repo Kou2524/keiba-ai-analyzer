@@ -389,6 +389,45 @@ function renderExplanation(data) {
         この予想は、出走馬の過去成績に加えて、騎手評価・脚質評価・枠順補正を含めて総合スコアを出しています。
       </p>
 
+      <div class="prediction-mark-guide">
+        <h3>🏇 予想印の見方</h3>
+
+        <div>
+          ◎ 本命
+          <small>
+            AIが最も高く評価した馬。軸候補。
+          </small>
+        </div>
+
+        <div>
+          ○ 対抗
+          <small>
+            本命に次ぐ高評価。逆転候補。
+          </small>
+        </div>
+
+        <div>
+          ▲ 単穴
+          <small>
+            上位争いが期待できる有力馬。
+          </small>
+        </div>
+
+        <div>
+          △ 連下
+          <small>
+           馬券圏内に入る可能性がある注目馬。
+          </small>
+        </div>
+
+        <div>
+          ☆ 穴候補
+          <small>
+           人気薄でも好走する可能性がある穴馬。
+          </small>
+        </div>
+      </div>
+
       <div class="explanation-grid">
         <div class="explanation-item">
           <h3>🟢 コース適性</h3>
