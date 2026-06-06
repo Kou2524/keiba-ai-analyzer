@@ -223,6 +223,49 @@ confidenceElement.innerHTML = `
       adjustedMark: getPredictionMark(index)
     }));
 
+  const trifectaTickets = buildTrifectaRecommendations(adjustedRanking);
+
+let trifectaElement = document.getElementById("trifectaBox");
+
+if (!trifectaElement) {
+  trifectaElement = document.createElement("div");
+  trifectaElement.id = "trifectaBox";
+
+  rankingList.insertAdjacentElement(
+    "beforebegin",
+    trifectaElement
+  );
+}
+
+trifectaElement.innerHTML = `
+  <div class="trifecta-box">
+    <h2>🏇 おすすめ3連単</h2>
+    <p class="trifecta-lead">
+      枠順補正後のAI順位をもとに、自動で買い目候補を作成しています。
+    </p>
+
+    <div class="trifecta-list">
+      ${trifectaTickets.map(ticket => `
+        <div class="trifecta-ticket">
+          <div class="trifecta-label">${escapeHtml(ticket.label)}</div>
+
+          <div class="trifecta-combo">
+            ${ticket.combo.map(horse => `
+              <span>
+                ${escapeHtml(horse.adjustedMark || "")}
+                ${escapeHtml(horse.horseNumber || "-")}
+                ${escapeHtml(horse.horseName || "馬名不明")}
+              </span>
+            `).join(`<b>→</b>`)}
+          </div>
+
+          <p>${escapeHtml(ticket.comment)}</p>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+`;
+  
   adjustedRanking.slice(0, 10).forEach(item => {
     const detail = item.detail || {};
 
@@ -549,4 +592,49 @@ function calculateFrameBonus(horseNumber, raceCondition) {
 function getPredictionMark(index) {
   const marks = ["◎", "○", "▲", "△", "☆"];
   return marks[index] || "";
+}
+
+function buildTrifectaRecommendations(ranking) {
+  const top5 = ranking.slice(0, 5);
+
+  if (top5.length < 3) {
+    return [];
+  }
+
+  const first = top5[0];
+  const second = top5[1];
+  const third = top5[2];
+  const fourth = top5[3];
+  const fifth = top5[4];
+
+  const tickets = [
+    {
+      label: "本線",
+      combo: [first, second, third],
+      comment: "AI評価上位3頭を素直に並べた本命パターン"
+    },
+    {
+      label: "対抗",
+      combo: [first, third, second],
+      comment: "2着と3着を入れ替えた安定寄りパターン"
+    }
+  ];
+
+  if (fourth) {
+    tickets.push({
+      label: "押さえ",
+      combo: [first, second, fourth],
+      comment: "4番手評価の馬を3着に入れた押さえ"
+    });
+  }
+
+  if (fifth) {
+    tickets.push({
+      label: "穴狙い",
+      combo: [second, first, fifth],
+      comment: "2番手評価を1着に置いた少し攻めるパターン"
+    });
+  }
+
+  return tickets;
 }
