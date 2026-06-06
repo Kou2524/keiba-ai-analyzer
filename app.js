@@ -143,6 +143,20 @@ function renderResult(data) {
 
   const resultItems = data.aiScoreRanking;
   const aiConfidence = calculateAiConfidence(resultItems);
+
+  let confidenceLabel = "";
+let confidenceClass = "";
+
+if (aiConfidence >= 80) {
+  confidenceLabel = "高信頼";
+  confidenceClass = "high";
+} else if (aiConfidence >= 60) {
+  confidenceLabel = "標準";
+  confidenceClass = "medium";
+} else {
+  confidenceLabel = "低め";
+  confidenceClass = "low";
+}
   
   document.getElementById("result").classList.remove("hidden");
   document.getElementById("raceTitle").textContent = data.title || "分析結果";
@@ -167,9 +181,13 @@ confidenceElement.innerHTML = `
       🤖 AI信頼度
     </div>
 
-    <div class="ai-confidence-value">
+    <div class="ai-confidence-value ${confidenceClass}">
       ${aiConfidence}%
     </div>
+
+     <div class="ai-confidence-status ${confidenceClass}">
+      ${confidenceLabel}
+     </div>
 
     <div class="ai-confidence-note">
       データ量・スコア差から算出
