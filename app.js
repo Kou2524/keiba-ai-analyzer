@@ -199,33 +199,10 @@ confidenceElement.innerHTML = `
   rankingList.innerHTML = "";
 
   console.log(data.aiScoreRanking[0].detail);
+
+  const trifectaTickets = buildTrifectaRecommendations(data.aiScoreRanking);
   
-  const adjustedRanking = data.aiScoreRanking
-    .map(item => {
-      const frameBonus = calculateFrameBonus(
-        item.horseNumber,
-        data.raceCondition
-      );
-
-      const adjustedTotalScore =
-        (Number(item.totalScore) || 0) + frameBonus;
-
-      return {
-        ...item,
-        frameBonus,
-        adjustedTotalScore
-      };
-    })
-    .sort((a, b) => b.adjustedTotalScore - a.adjustedTotalScore)
-    .map((item, index) => ({
-      ...item,
-      adjustedRank: index + 1,
-      adjustedMark: getPredictionMark(index)
-    }));
-
-  const trifectaTickets = buildTrifectaRecommendations(adjustedRanking);
-
-let trifectaElement = document.getElementById("trifectaBox");
+  let trifectaElement = document.getElementById("trifectaBox");
 
 if (!trifectaElement) {
   trifectaElement = document.createElement("div");
@@ -241,7 +218,7 @@ trifectaElement.innerHTML = `
   <div class="trifecta-box">
     <h2>🏇 おすすめ3連単</h2>
     <p class="trifecta-lead">
-      枠順補正後のAI順位をもとに、自動で買い目候補を作成しています。
+      AI順位をもとに、自動で買い目候補を作成しています。
     </p>
 
     <div class="trifecta-list">
@@ -252,7 +229,7 @@ trifectaElement.innerHTML = `
           <div class="trifecta-combo">
             ${ticket.combo.map(horse => `
               <span>
-                ${escapeHtml(horse.adjustedMark || "")}
+                ${escapeHtml(horse.mark || "")}
                 ${escapeHtml(horse.horseNumber || "-")}
                 ${escapeHtml(horse.horseName || "馬名不明")}
               </span>
@@ -266,14 +243,14 @@ trifectaElement.innerHTML = `
   </div>
 `;
   
-  adjustedRanking.slice(0, 10).forEach(item => {
+  data.aiScoreRanking.slice(0, 10).forEach(item => {
     const detail = item.detail || {};
 
-    const frameBonus = item.frameBonus;
-    const displayTotalScore = item.adjustedTotalScore;
+    const displayTotalScore =
+      Number(item.totalScore) || 0;
     
     const card = document.createElement("div");
-    card.className = `rank-card rank-${Number(item.adjustedRank) || ""}`;
+    card.className = `rank-card rank-${Number(item.rank) || ""}`;
 
     const ranksHtml = Array.isArray(item.recentRanks)
       ? item.recentRanks
@@ -285,16 +262,12 @@ trifectaElement.innerHTML = `
       <div class="rank-main">
         <div class="rank-left">
           <div class="rank-title">
-            <span class="mark">${escapeHtml(item.adjustedMark || "")}</span>
-            <span class="rank-number">${escapeHtml(item.adjustedRank || "-")}位</span>
+            <span class="mark">${escapeHtml(item.mark || "")}</span>
+            <span class="rank-number">${escapeHtml(item.rank || "-")}位</span>
           </div>
 
           <h3>${escapeHtml(item.horseName || "馬名不明")}</h3>
           <p class="score">総合スコア：${escapeHtml(displayTotalScore)}点</p>
-
-          <p class="frame-bonus">
-            🎯 枠順補正：${frameBonus >= 0 ? "+" : ""}${frameBonus}点
-          </p>
 
           <ul class="score-list">
             <li>🟢 コース適性：${escapeHtml(detail.courseFit ?? 0)}点</li>
@@ -386,7 +359,7 @@ function renderExplanation(data) {
     <section class="explanation-card">
       <h2>スコア判定の見方</h2>
       <p class="explanation-lead">
-        この予想は、出走馬の過去成績に加えて、騎手評価・脚質評価・枠順補正を含めて総合スコアを出しています。
+        この予想は、出走馬の過去成績に加えて、騎手評価・脚質評価を含めて総合スコアを出しています。
       </p>
 
       <div class="prediction-mark-guide">
@@ -492,15 +465,6 @@ function renderExplanation(data) {
           </p>
           <span>最大18点</span>
         </div>
-
-        <div class="explanation-item">
-          <h3>🎯 枠順補正</h3>
-          <p>
-            コースごとの有利不利をもとに、馬番から加点・減点を行います。
-            東京芝1600m、中山芝1200m、新潟芝1000mなど、一部条件で補正が反映されます。
-          </p>
-          <span>補正評価</span>
-        </div>
         
       </div>
 
@@ -594,43 +558,6 @@ function calculateAiConfidence(items) {
     horseCountRate * 5;
 
   return Math.round(Math.max(35, Math.min(confidence, 95)));
-}
-
-function calculateFrameBonus(horseNumber, raceCondition) {
-  const number = Number(horseNumber);
-  if (!number) return 0;
-
-  const place = raceCondition?.placeName || "";
-  const distanceText = raceCondition?.distanceText || "";
-
-  // 東京芝1600m：内〜中枠を少し評価
-  if (place === "東京" && distanceText === "芝1600") {
-    if (number >= 1 && number <= 4) return 3;
-    if (number >= 5 && number <= 12) return 1;
-    return -1;
-  }
-
-  // 中山芝1200m：内枠有利
-  if (place === "中山" && distanceText === "芝1200") {
-    if (number >= 1 && number <= 6) return 3;
-    if (number >= 7 && number <= 12) return 1;
-    return -2;
-  }
-
-  // 新潟芝1000m：外枠有利
-  if (place === "新潟" && distanceText === "芝1000") {
-    if (number >= 13) return 4;
-    if (number >= 9) return 2;
-    if (number <= 4) return -3;
-    return 0;
-  }
-
-  return 0;
-}
-
-function getPredictionMark(index) {
-  const marks = ["◎", "○", "▲", "△", "☆"];
-  return marks[index] || "";
 }
 
 function buildTrifectaRecommendations(ranking) {
