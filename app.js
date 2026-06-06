@@ -343,7 +343,7 @@ function renderExplanation(data) {
     <section class="explanation-card">
       <h2>スコア判定の見方</h2>
       <p class="explanation-lead">
-        この予想は、出走馬の過去成績に加えて、騎手評価・脚質評価を含めた7つの項目を点数化して総合スコアを出しています。
+        この予想は、出走馬の過去成績に加えて、騎手評価・脚質評価・枠順補正を含めて総合スコアを出しています。
       </p>
 
       <div class="explanation-grid">
@@ -409,6 +409,15 @@ function renderExplanation(data) {
             レース展開との相性を見るための評価です。
           </p>
           <span>最大18点</span>
+        </div>
+
+        <div class="explanation-item">
+          <h3>🎯 枠順補正</h3>
+          <p>
+            コースごとの有利不利をもとに、馬番から加点・減点を行います。
+            東京芝1600m、中山芝1200m、新潟芝1000mなど、一部条件で補正が反映されます。
+          </p>
+          <span>補正評価</span>
         </div>
         
       </div>
