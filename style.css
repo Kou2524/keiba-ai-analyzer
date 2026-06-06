@@ -380,3 +380,69 @@ button:disabled {
 .ai-confidence-status.low {
   color: #ef4444;
 }
+
+.trifecta-box {
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: 18px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+}
+
+.trifecta-box h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.trifecta-lead {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: #7c2d12;
+}
+
+.trifecta-list {
+  display: grid;
+  gap: 12px;
+}
+
+.trifecta-ticket {
+  padding: 14px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #fdba74;
+}
+
+.trifecta-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ea580c;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.trifecta-combo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.trifecta-combo span {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #ffedd5;
+}
+
+.trifecta-combo b {
+  color: #ea580c;
+}
+
+.trifecta-ticket p {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: #7c2d12;
+}
