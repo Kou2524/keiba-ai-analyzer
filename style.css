@@ -446,3 +446,29 @@ button:disabled {
   font-size: 0.82rem;
   color: #7c2d12;
 }
+
+.prediction-mark-guide {
+  margin: 18px 0 24px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #dbeafe;
+}
+
+.prediction-mark-guide h3 {
+  margin: 0 0 12px;
+}
+
+.prediction-mark-guide div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.prediction-mark-guide small {
+  font-weight: 400;
+  color: #64748b;
+  font-size: 0.85rem;
+}
