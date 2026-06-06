@@ -359,3 +359,24 @@ button:disabled {
   opacity: 0.75;
   margin-top: 6px;
 }
+
+.ai-confidence-status {
+  margin-top: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ai-confidence-value.high,
+.ai-confidence-status.high {
+  color: #22c55e;
+}
+
+.ai-confidence-value.medium,
+.ai-confidence-status.medium {
+  color: #facc15;
+}
+
+.ai-confidence-value.low,
+.ai-confidence-status.low {
+  color: #ef4444;
+}
