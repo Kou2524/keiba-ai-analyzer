@@ -198,6 +198,8 @@ confidenceElement.innerHTML = `
   const rankingList = document.getElementById("rankingList");
   rankingList.innerHTML = "";
 
+  console.log(data.aiScoreRanking[0]);
+  
   data.aiScoreRanking.slice(0, 10).forEach(item => {
     const detail = item.detail || {};
 
