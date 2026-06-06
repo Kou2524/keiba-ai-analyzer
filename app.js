@@ -415,19 +415,29 @@ function calculateAiConfidence(items) {
   let totalCount = 0;
 
   items.forEach(item => {
+    const detail = item.detail || {};
+
     const checks = [
       item.totalScore,
-      item.jockeyScore,
-      item.trainerScore,
-      item.runningStyleScore,
-      item.popularity,
-      item.odds,
-      item.weight
+      detail.courseFit,
+      detail.recentForm,
+      detail.agari,
+      detail.bestDistance,
+      detail.latestRank,
+      detail.jockeyPoint,
+      detail.jockeyScore,
+      detail.runningStyleScore
     ];
 
     checks.forEach(value => {
       totalCount++;
-      if (value !== undefined && value !== null && value !== "" && value !== "不明") {
+
+      if (
+        value !== undefined &&
+        value !== null &&
+        value !== "" &&
+        value !== "不明"
+      ) {
         knownCount++;
       }
     });
@@ -440,18 +450,30 @@ function calculateAiConfidence(items) {
     .sort((a, b) => b - a);
 
   const topScore = scores[0] || 0;
+  const secondScore = scores[1] || 0;
+  const thirdScore = scores[2] || 0;
   const bottomScore = scores[scores.length - 1] || 0;
-  const scoreGap = topScore - bottomScore;
 
-  const scoreGapRate = Math.min(scoreGap / 30, 1);
+  const totalGap = topScore - bottomScore;
+  const topGap = topScore - secondScore;
+  const top3Gap = topScore - thirdScore;
+
+  const totalGapRate = Math.min(totalGap / 40, 1);
+  const topGapRate = Math.min(topGap / 10, 1);
+  const top3GapRate = Math.min(top3Gap / 18, 1);
 
   const horseCount = items.length;
-  const horseCountRate = horseCount <= 12 ? 1 : horseCount <= 16 ? 0.9 : 0.85;
+  const horseCountRate =
+    horseCount <= 12 ? 1 :
+    horseCount <= 16 ? 0.9 :
+    0.82;
 
   const confidence =
-    dataCompleteness * 60 +
-    scoreGapRate * 30 +
-    horseCountRate * 10;
+    dataCompleteness * 45 +
+    totalGapRate * 20 +
+    topGapRate * 20 +
+    top3GapRate * 10 +
+    horseCountRate * 5;
 
-  return Math.round(Math.max(40, Math.min(confidence, 95)));
+  return Math.round(Math.max(35, Math.min(confidence, 95)));
 }
