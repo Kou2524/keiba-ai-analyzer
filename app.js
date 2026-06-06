@@ -536,3 +536,8 @@ function calculateFrameBonus(horseNumber, raceCondition) {
 
   return 0;
 }
+
+function getPredictionMark(index) {
+  const marks = ["◎", "○", "▲", "△", "☆"];
+  return marks[index] || "";
+}
