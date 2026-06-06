@@ -141,9 +141,42 @@ function renderResult(data) {
     return;
   }
 
+  const resultItems = data.aiScoreRanking;
+  const aiConfidence = calculateAiConfidence(resultItems);
+  
   document.getElementById("result").classList.remove("hidden");
   document.getElementById("raceTitle").textContent = data.title || "分析結果";
 
+  const raceTitle = document.getElementById("raceTitle");
+
+let confidenceElement = document.getElementById("aiConfidence");
+
+if (!confidenceElement) {
+  confidenceElement = document.createElement("div");
+  confidenceElement.id = "aiConfidence";
+
+  raceTitle.insertAdjacentElement(
+    "afterend",
+    confidenceElement
+  );
+}
+
+confidenceElement.innerHTML = `
+  <div class="ai-confidence-box">
+    <div class="ai-confidence-title">
+      🤖 AI信頼度
+    </div>
+
+    <div class="ai-confidence-value">
+      ${aiConfidence}%
+    </div>
+
+    <div class="ai-confidence-note">
+      データ量・スコア差から算出
+    </div>
+  </div>
+`;
+  
   const rankingList = document.getElementById("rankingList");
   rankingList.innerHTML = "";
 
@@ -353,4 +386,52 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function calculateAiConfidence(items) {
+  if (!items || items.length === 0) return 0;
+
+  let knownCount = 0;
+  let totalCount = 0;
+
+  items.forEach(item => {
+    const checks = [
+      item.totalScore,
+      item.jockeyScore,
+      item.trainerScore,
+      item.runningStyleScore,
+      item.popularity,
+      item.odds,
+      item.weight
+    ];
+
+    checks.forEach(value => {
+      totalCount++;
+      if (value !== undefined && value !== null && value !== "" && value !== "不明") {
+        knownCount++;
+      }
+    });
+  });
+
+  const dataCompleteness = knownCount / totalCount;
+
+  const scores = items
+    .map(item => Number(item.totalScore) || 0)
+    .sort((a, b) => b - a);
+
+  const topScore = scores[0] || 0;
+  const bottomScore = scores[scores.length - 1] || 0;
+  const scoreGap = topScore - bottomScore;
+
+  const scoreGapRate = Math.min(scoreGap / 30, 1);
+
+  const horseCount = items.length;
+  const horseCountRate = horseCount <= 12 ? 1 : horseCount <= 16 ? 0.9 : 0.85;
+
+  const confidence =
+    dataCompleteness * 60 +
+    scoreGapRate * 30 +
+    horseCountRate * 10;
+
+  return Math.round(Math.max(40, Math.min(confidence, 95)));
 }
